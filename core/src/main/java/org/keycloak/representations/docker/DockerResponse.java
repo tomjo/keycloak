@@ -38,7 +38,7 @@ public class DockerResponse {
 
     public DockerResponse setToken(final String token) {
         this.token = token;
-        this.access_token = access_token;
+        this.access_token = token;
         return this;
     }
 
