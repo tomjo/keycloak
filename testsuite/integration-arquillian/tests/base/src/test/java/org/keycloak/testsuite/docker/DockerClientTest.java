@@ -8,6 +8,8 @@ import org.keycloak.representations.idm.KeysMetadataRepresentation;
 import org.keycloak.representations.idm.RealmRepresentation;
 import org.keycloak.testsuite.AbstractKeycloakTest;
 import org.keycloak.testsuite.ProfileAssume;
+import org.keycloak.testsuite.arquillian.annotation.AuthServerContainerExclude;
+import org.keycloak.testsuite.arquillian.annotation.AuthServerContainerExclude.AuthServer;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.Container;
@@ -26,8 +28,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assume.assumeTrue;
 import static org.keycloak.testsuite.util.ServerURLs.AUTH_SERVER_PORT;
-import org.keycloak.testsuite.arquillian.annotation.AuthServerContainerExclude;
-import org.keycloak.testsuite.arquillian.annotation.AuthServerContainerExclude.AuthServer;
 import static org.keycloak.testsuite.util.WaitUtils.pause;
 
 @AuthServerContainerExclude(AuthServer.REMOTE)
@@ -37,12 +37,13 @@ public class DockerClientTest extends AbstractKeycloakTest {
     public static final String DOCKER_USER = "docker-user";
     public static final String DOCKER_USER_PASSWORD = "password";
 
-    public static final String REGISTRY_HOSTNAME = "localhost";
+    public static final String REGISTRY_HOSTNAME = "hades.lan";
     public static final Integer REGISTRY_PORT = 5000;
     public static final String MINIMUM_DOCKER_VERSION = "1.8.0";
 
     private GenericContainer dockerRegistryContainer = null;
     private GenericContainer dockerClientContainer = null;
+    private GenericContainer imgContainer = null;
 
     private static String hostIp;
     private static String authServerPort;
@@ -125,6 +126,12 @@ public class DockerClientTest extends AbstractKeycloakTest {
                 .withNetworkMode("host")
                 .withPrivilegedMode(true);
         dockerClientContainer.start();
+
+        imgContainer = new GenericContainer("r.j3ss.co/img")
+                .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger("imgContainer")))
+                .withNetworkMode("host")
+                .withPrivilegedMode(true);
+        imgContainer.start();
     }
 
     @Override
@@ -134,6 +141,7 @@ public class DockerClientTest extends AbstractKeycloakTest {
         pause(5000); // wait for the container logs
 
         dockerClientContainer.close();
+        imgContainer.close();
         dockerRegistryContainer.close();
     }
 
@@ -141,6 +149,14 @@ public class DockerClientTest extends AbstractKeycloakTest {
     public void shouldPerformDockerAuthAgainstRegistry() throws Exception {
         log.info("Starting the attempt for login...");
         Container.ExecResult dockerLoginResult = dockerClientContainer.execInContainer("docker", "login", "-u", DOCKER_USER, "-p", DOCKER_USER_PASSWORD, REGISTRY_HOSTNAME + ":" + REGISTRY_PORT);
+        printCommandResult(dockerLoginResult);
+        assertThat(dockerLoginResult.getStdout(), containsString("Login Succeeded"));
+    }
+
+    @Test
+    public void shouldPerformDockerAuthWithClientExpectingAccessTokenAgainstRegistry() throws Exception {
+        log.info("Starting the attempt for login...");
+        Container.ExecResult dockerLoginResult = imgContainer.execInContainer("img", "login", "-u", DOCKER_USER, "-p", DOCKER_USER_PASSWORD, REGISTRY_HOSTNAME + ":" + REGISTRY_PORT);
         printCommandResult(dockerLoginResult);
         assertThat(dockerLoginResult.getStdout(), containsString("Login Succeeded"));
     }
