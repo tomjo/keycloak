@@ -150,6 +150,7 @@ public class DockerClientTest extends AbstractKeycloakTest {
         log.info("Starting the attempt for login...");
         Container.ExecResult dockerLoginResult = dockerClientContainer.execInContainer("docker", "login", "-u", DOCKER_USER, "-p", DOCKER_USER_PASSWORD, REGISTRY_HOSTNAME + ":" + REGISTRY_PORT);
         printCommandResult(dockerLoginResult);
+        log.error(dockerLoginResult.getStderr());
         assertThat(dockerLoginResult.getStdout(), containsString("Login Succeeded"));
     }
 
