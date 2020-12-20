@@ -127,11 +127,11 @@ public class DockerClientTest extends AbstractKeycloakTest {
                 .withPrivilegedMode(true);
         dockerClientContainer.start();
 
-        imgContainer = new GenericContainer("r.j3ss.co/img:v0.5.11")
-                .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger("imgContainer")))
-                .withNetworkMode("host")
-                .withPrivilegedMode(true);
-        imgContainer.start();
+//        imgContainer = new GenericContainer("r.j3ss.co/img:v0.5.11")
+//                .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger("imgContainer")))
+//                .withNetworkMode("host")
+//                .withPrivilegedMode(true);
+//        imgContainer.start();
     }
 
     @Override
@@ -141,7 +141,7 @@ public class DockerClientTest extends AbstractKeycloakTest {
         pause(5000); // wait for the container logs
 
         dockerClientContainer.close();
-        imgContainer.close();
+//        imgContainer.close();
         dockerRegistryContainer.close();
     }
 
@@ -153,13 +153,13 @@ public class DockerClientTest extends AbstractKeycloakTest {
         assertThat(dockerLoginResult.getStdout(), containsString("Login Succeeded"));
     }
 
-    @Test
-    public void shouldPerformDockerAuthWithClientExpectingAccessTokenAgainstRegistry() throws Exception {
-        log.info("Starting the attempt for login...");
-        Container.ExecResult dockerLoginResult = imgContainer.execInContainer("img", "login", "-u", DOCKER_USER, "-p", DOCKER_USER_PASSWORD, REGISTRY_HOSTNAME + ":" + REGISTRY_PORT);
-        printCommandResult(dockerLoginResult);
-        assertThat(dockerLoginResult.getStdout(), containsString("Login Succeeded"));
-    }
+//    @Test
+//    public void shouldPerformDockerAuthWithClientExpectingAccessTokenAgainstRegistry() throws Exception {
+//        log.info("Starting the attempt for login...");
+//        Container.ExecResult dockerLoginResult = imgContainer.execInContainer("img", "login", "-u", DOCKER_USER, "-p", DOCKER_USER_PASSWORD, REGISTRY_HOSTNAME + ":" + REGISTRY_PORT);
+//        printCommandResult(dockerLoginResult);
+//        assertThat(dockerLoginResult.getStdout(), containsString("Login Succeeded"));
+//    }
 
     private void printCommandResult(Container.ExecResult result) {
         log.infof("Command executed. Output follows:\nSTDOUT: %s\n---\nSTDERR: %s", result.getStdout(), result.getStderr());
