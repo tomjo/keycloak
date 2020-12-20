@@ -127,7 +127,7 @@ public class DockerClientTest extends AbstractKeycloakTest {
                 .withPrivilegedMode(true);
         dockerClientContainer.start();
 
-        imgContainer = new GenericContainer("r.j3ss.co/img")
+        imgContainer = new GenericContainer("r.j3ss.co/img:v0.5.11")
                 .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger("imgContainer")))
                 .withNetworkMode("host")
                 .withPrivilegedMode(true);
