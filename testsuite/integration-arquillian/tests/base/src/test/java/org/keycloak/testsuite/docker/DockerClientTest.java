@@ -37,7 +37,7 @@ public class DockerClientTest extends AbstractKeycloakTest {
     public static final String DOCKER_USER = "docker-user";
     public static final String DOCKER_USER_PASSWORD = "password";
 
-    public static final String REGISTRY_HOSTNAME = "hades.lan";
+    public static final String REGISTRY_HOSTNAME = "localhost";
     public static final Integer REGISTRY_PORT = 5000;
     public static final String MINIMUM_DOCKER_VERSION = "1.8.0";
 
