@@ -94,6 +94,7 @@ public class DockerAuthV2Protocol implements LoginProtocol {
         // First, create a base response token with realm + user values populated
         final AuthenticatedClientSessionModel clientSession = clientSessionCtx.getClientSession();
         final ClientModel client = clientSession.getClient();
+        logger.info("authenticated request for "+userSession.getUser().getUsername());
 
         DockerResponseToken responseToken = new DockerResponseToken()
                 .id(KeycloakModelUtils.generateId())
@@ -112,6 +113,7 @@ public class DockerAuthV2Protocol implements LoginProtocol {
         // Next, allow mappers to decorate the token to add/remove scopes as appropriate
 
         for (Map.Entry<ProtocolMapperModel, ProtocolMapper> entry : ProtocolMapperUtils.getSortedProtocolMappers(session, clientSessionCtx)) {
+            logger.info("finding protocol mapper: "+entry.getKey()+" "+entry.getValue());
             ProtocolMapperModel mapping = entry.getKey();
             ProtocolMapper mapper = entry.getValue();
 
@@ -152,6 +154,7 @@ public class DockerAuthV2Protocol implements LoginProtocol {
 
     @Override
     public Response sendError(final AuthenticationSessionModel clientSession, final LoginProtocol.Error error) {
+        logger.error("Error: "+error);
         return new ResponseBuilderImpl().status(Response.Status.INTERNAL_SERVER_ERROR).build();
     }
 

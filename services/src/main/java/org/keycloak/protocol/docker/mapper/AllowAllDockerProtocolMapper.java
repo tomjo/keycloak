@@ -1,5 +1,6 @@
 package org.keycloak.protocol.docker.mapper;
 
+import org.jboss.logging.Logger;
 import org.keycloak.models.AuthenticatedClientSessionModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.ProtocolMapperModel;
@@ -12,6 +13,8 @@ import org.keycloak.representations.docker.DockerResponseToken;
  * Populates token with requested scope.  If more scopes are present than what has been requested, they will be removed.
  */
 public class AllowAllDockerProtocolMapper extends DockerAuthV2ProtocolMapper implements DockerAuthV2AttributeMapper {
+
+    protected static final Logger logger = Logger.getLogger(AllowAllDockerProtocolMapper.class);
 
     public static final String PROVIDER_ID = "docker-v2-allow-all-mapper";
 
@@ -42,11 +45,13 @@ public class AllowAllDockerProtocolMapper extends DockerAuthV2ProtocolMapper imp
         responseToken.getAccessItems().clear();
 
         final String requestedScope = clientSession.getNote(DockerAuthV2Protocol.SCOPE_PARAM);
+        logger.info("Transforming docker response token, requestedScope="+requestedScope+" "+clientSession.getNotes());
         if (requestedScope != null) {
             final DockerAccess allRequestedAccess = new DockerAccess(requestedScope);
             responseToken.getAccessItems().add(allRequestedAccess);
+            logger.info("Added requested acces: "+allRequestedAccess);
         }
-
+        logger.info("Total access:"+responseToken.getAccessItems());
         return responseToken;
     }
 }
