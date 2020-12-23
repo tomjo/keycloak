@@ -22,6 +22,7 @@ import org.keycloak.utils.ProfileHelper;
 import javax.ws.rs.GET;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 /**
  * Implements a docker-client understandable format.
@@ -62,7 +63,8 @@ public class DockerEndpoint extends AuthorizationEndpointBase {
             logger.errorv("Failed to lookup client given by service={0} parameter for realm: {1}.", service, realm.getName());
             throw new ErrorResponseException("invalid_client", "Client specified by 'service' parameter does not exist", Response.Status.BAD_REQUEST);
         }
-        scope = String.join(DockerAuthV2Protocol.SCOPE_SEPARATOR, params.get(DockerAuthV2Protocol.SCOPE_PARAM));
+        List<String> scopeParams = params.get(DockerAuthV2Protocol.SCOPE_PARAM);
+        scope = scopeParams != null ? String.join(DockerAuthV2Protocol.SCOPE_SEPARATOR, scopeParams) : null;
         method = httpRequest.getHttpMethod();
         logger.info("Docker request with method: "+method);
 
