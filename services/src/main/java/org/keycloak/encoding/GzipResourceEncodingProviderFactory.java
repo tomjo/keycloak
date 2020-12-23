@@ -8,6 +8,7 @@ import org.keycloak.models.KeycloakSession;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -67,7 +68,13 @@ public class GzipResourceEncodingProviderFactory implements ResourceEncodingProv
         }
 
         if (!cacheDir.isDirectory() && !cacheDir.mkdirs()) {
-            logger.warn("Failed to create gzip cache directory");
+            logger.warn("Failed to create gzip cache directory: "+cacheDir.getAbsolutePath());
+            try {
+                Files.createDirectories(cacheDir.toPath());
+                return cacheDir;
+            } catch (IOException e) {
+                logger.error("Other attempt at creating gzip cache directory failed", e);
+            }
             return null;
         }
 
