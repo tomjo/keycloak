@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  {
  "token" : "eyJh...nSQ",
+ "access_token" : "eyJh...nSQ",
  "expires_in" : 300,
  "issued_at" : "2016-09-02T10:56:33Z"
  }
@@ -15,6 +16,8 @@ public class DockerResponse {
 
     @JsonProperty("token")
     private String token;
+    @JsonProperty("access_token")
+    private String access_token;
     @JsonProperty("expires_in")
     private Integer expires_in;
     @JsonProperty("issued_at")
@@ -25,6 +28,7 @@ public class DockerResponse {
 
     public DockerResponse(final String token, final Integer expires_in, final String issued_at) {
         this.token = token;
+        this.access_token = token;
         this.expires_in = expires_in;
         this.issued_at = issued_at;
     }
@@ -35,6 +39,7 @@ public class DockerResponse {
 
     public DockerResponse setToken(final String token) {
         this.token = token;
+        this.access_token = token;
         return this;
     }
 
@@ -56,6 +61,10 @@ public class DockerResponse {
         return this;
     }
 
+    public String getAccess_token() {
+        return access_token;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
@@ -64,6 +73,7 @@ public class DockerResponse {
         final DockerResponse that = (DockerResponse) o;
 
         if (token != null ? !token.equals(that.token) : that.token != null) return false;
+        if (access_token != null ? !access_token.equals(that.access_token) : that.access_token != null) return false;
         if (expires_in != null ? !expires_in.equals(that.expires_in) : that.expires_in != null) return false;
         return issued_at != null ? issued_at.equals(that.issued_at) : that.issued_at == null;
 
@@ -72,6 +82,7 @@ public class DockerResponse {
     @Override
     public int hashCode() {
         int result = token != null ? token.hashCode() : 0;
+        result = 31 * result + (access_token != null ? access_token.hashCode() : 0);
         result = 31 * result + (expires_in != null ? expires_in.hashCode() : 0);
         result = 31 * result + (issued_at != null ? issued_at.hashCode() : 0);
         return result;
@@ -81,6 +92,7 @@ public class DockerResponse {
     public String toString() {
         return "DockerResponse{" +
                 "token='" + token + '\'' +
+                ", access_token='" + access_token + '\'' +
                 ", expires_in='" + expires_in + '\'' +
                 ", issued_at='" + issued_at + '\'' +
                 '}';
