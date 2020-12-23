@@ -38,7 +38,7 @@ public class DockerAuthV2Protocol implements LoginProtocol {
     public static final String SERVICE_PARAM = "service";
     public static final String SCOPE_PARAM = "scope";
     public static final String REQUEST_METHOD = "method";
-    public static final String SCOPE_SEPARATOR = ";";
+    public static final String SCOPE_SEPARATOR = " ";
     public static final String ISSUER = "docker.iss"; // don't want to overlap with OIDC notes
     public static final String ISO_8601_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
