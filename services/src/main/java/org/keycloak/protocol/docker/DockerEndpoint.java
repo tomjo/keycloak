@@ -34,7 +34,6 @@ public class DockerEndpoint extends AuthorizationEndpointBase {
     private String account;
     private String service;
     private String scope;
-    private String method;
     private ClientModel client;
     private AuthenticationSessionModel authenticationSession;
 
@@ -64,8 +63,6 @@ public class DockerEndpoint extends AuthorizationEndpointBase {
             throw new ErrorResponseException("invalid_client", "Client specified by 'service' parameter does not exist", Response.Status.BAD_REQUEST);
         }
         scope = StringUtils.join(params.get(DockerAuthV2Protocol.SCOPE_PARAM), DockerAuthV2Protocol.SCOPE_SEPARATOR);
-        method = httpRequest.getHttpMethod();
-        logger.info("Docker request with method: "+method);
 
         checkSsl();
         checkRealm();
@@ -92,7 +89,6 @@ public class DockerEndpoint extends AuthorizationEndpointBase {
         authenticationSession.setClientNote(DockerAuthV2Protocol.ACCOUNT_PARAM, account);
         authenticationSession.setClientNote(DockerAuthV2Protocol.SERVICE_PARAM, service);
         authenticationSession.setClientNote(DockerAuthV2Protocol.SCOPE_PARAM, scope);
-        authenticationSession.setClientNote(DockerAuthV2Protocol.REQUEST_METHOD, method);
         authenticationSession.setClientNote(DockerAuthV2Protocol.ISSUER, Urls.realmIssuer(session.getContext().getUri().getBaseUri(), realm.getName()));
 
     }
