@@ -95,6 +95,7 @@ public class DockerAuthV2Protocol implements LoginProtocol {
         final AuthenticatedClientSessionModel clientSession = clientSessionCtx.getClientSession();
         final ClientModel client = clientSession.getClient();
         logger.info("authenticated request for "+userSession.getUser().getUsername());
+        logger.info(uriInfo.getRequestUri()+" "+uriInfo.getQueryParameters()+" "+uriInfo.getPathParameters());
 
         DockerResponseToken responseToken = new DockerResponseToken()
                 .id(KeycloakModelUtils.generateId())
