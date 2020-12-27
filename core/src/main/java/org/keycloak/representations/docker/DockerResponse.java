@@ -28,7 +28,7 @@ public class DockerResponse {
 
     public DockerResponse(final String token, final Integer expires_in, final String issued_at) {
         this.token = token;
-//        this.access_token = token;
+        this.access_token = token;
         this.expires_in = expires_in;
         this.issued_at = issued_at;
     }
@@ -39,7 +39,7 @@ public class DockerResponse {
 
     public DockerResponse setToken(final String token) {
         this.token = token;
-//        this.access_token = token;
+        this.access_token = token;
         return this;
     }
 
